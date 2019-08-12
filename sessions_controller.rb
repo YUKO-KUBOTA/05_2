@@ -11,8 +11,10 @@ class SessionsController < ApplicationController
     # user = User.find_by(email: params[:session][:email])
     # if user && user.authenticate(params[:session][:password])
     
-    user = User.find_by(email: email_params[:email])
-    if user && user.authenticate(password_params[:password])
+    # user = User.find_by(email: email_params[:email])
+    user = User.find_by(email: session_params[:email])
+    logger.error("authenticate: #{user.authenticate(session_params[:password])}")
+    if user && user.authenticate(session_params[:password])
 #上記Rails 05　課題:SessionsControllerにストロングパラメーターを実装
 
       log_in user
@@ -28,13 +30,18 @@ class SessionsController < ApplicationController
     redirect_to root_url, info: 'ログアウトしました'
   end
 
-  def email_params
-    params.require(:session).permit(:email)
+  # def email_params
+  #   params.require(:session).permit(:email)
+  # end
+  
+  def session_params
+    # logger.info("params: #{params}")
+    params.require(:session).permit(:email, :password)
   end
 
-  def password_params
-    params.require(:session).permit(:password)
-  end
+  # def password_params
+  #   params.require(:session).permit(:password)
+  # end
 #上記Rails 05　課題:SessionsControllerにストロングパラメーターを実装
 
   private
